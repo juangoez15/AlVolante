@@ -58,7 +58,7 @@ TEMPLATES = [
 # Si no existe (estás en local), usará tus credenciales locales configuradas por defecto.
 DATABASES = {
     "default": dj_database_url.config(
-        default="postgres://alvolante_user:JPgp20015@localhost:5432/alvolante_db",
+        default="postgresql://alvolante_user:xYVpr4Onw6SwO1kvftrfHgcwrGYyqAwj@dpg-db3ae3bbc2fs73d4hp30-a.oregon-postgres.render.com/alvolante_db",
         conn_max_age=600,
         conn_health_checks=True,
     )
