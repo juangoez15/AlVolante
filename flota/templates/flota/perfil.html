@@ -1,0 +1,49 @@
+{% extends "flota/base.html" %}
+{% comment %}HU13 — Datos del administrador de flota.{% endcomment %}
+
+{% block titulo %}alVolante — Mi perfil{% endblock %}
+{% block breadcrumb %}Mi perfil{% endblock %}
+
+{% block contenido %}
+{% include "flota/partials/titulo_seccion.html" with texto="Mi perfil" %}
+
+<div class="av-card">
+  <!-- Se añade enctype para permitir transferencia de archivos -->
+  <form method="post" enctype="multipart/form-data" novalidate>
+    {% csrf_token %}
+    
+    <div class="row align-items-center">
+      <div class="col-md-3 text-center">
+        <!-- Input de archivo oculto que se activa al hacer clic en el avatar -->
+        <input type="file" id="avatar" name="avatar" accept="image/*" class="d-none" onchange="this.form.submit();">
+        
+        <label for="avatar" style="cursor: pointer;" title="Haz clic para cambiar tu foto de perfil">
+          {% if usuario.avatar %}
+            <img src="{{ usuario.avatar.url }}" alt="Avatar" class="rounded-circle mb-2" style="width: 110px; height: 110px; object-fit: cover;">
+          {% else %}
+            <div class="av-avatar mb-2 mx-auto d-flex align-items-center justify-content-center rounded-circle" style="width: 110px; height: 110px; background-color: #e9ecef;">
+              <!-- Puedes poner aquí un ícono por defecto si gustas -->
+            </div>
+          {% endif %}
+          <div class="small text-muted text-decoration-underline">Cambiar foto</div>
+        </label>
+      </div>
+      
+      <div class="col-md-9">
+        {% include "flota/partials/campo.html" with campo=form.nombre %}
+        {% include "flota/partials/campo.html" with campo=form.correo %}
+        {% include "flota/partials/campo.html" with campo=form.password %}
+
+        <p class="form-text mb-3">
+          La nueva contraseña es opcional. Si cambia el correo o la contraseña,
+          la sesión se cerrará y deberá autenticarse con las credenciales nuevas.
+        </p>
+
+        <button type="submit" class="btn-av">Guardar cambios</button>
+      </div>
+    </div>
+  </form>
+</div>
+{% endblock %}
+
+{% block pie %}{% endblock %}

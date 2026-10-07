@@ -1,0 +1,49 @@
+{% extends "flota/base.html" %}
+{% load flota_extras %}
+{% comment %}HU4 — Listado de la flota activa, con accesos a HU5 y HU6.{% endcomment %}
+
+{% block titulo %}alVolante — Mis vehículos{% endblock %}
+{% block breadcrumb %}Vehículos{% endblock %}
+
+{% block contenido %}
+<div class="d-flex align-items-center mb-3">
+  {% include "flota/partials/titulo_seccion.html" with texto="Mis vehículos" %}
+  <a class="btn-av-gold ms-auto" href="{% url 'vehiculo_crear' %}">+ Registrar vehículo</a>
+</div>
+
+<div class="av-card">
+  <form method="get" class="mb-3 av-buscador">
+    <input type="text" class="form-control" name="q" value="{{ buscar }}" placeholder="Buscar por placa...">
+  </form>
+
+  <table class="av-table">
+    <thead>
+      <tr><th>Placa</th><th>Tipo</th><th>Marca / Modelo</th><th>Año</th><th>Estado</th><th>Acciones</th></tr>
+    </thead>
+    <tbody>
+      {% for fila in filas %}
+        <tr>
+          <td><a class="placa" href="{% url 'vehiculo_detalle' fila.vehiculo.id %}">{{ fila.vehiculo.placa }}</a></td>
+          <td>{{ fila.vehiculo.tipo }}</td>
+          <td>{{ fila.vehiculo.marca }} {{ fila.vehiculo.modelo }}</td>
+          <td>{{ fila.vehiculo.anio }}</td>
+          <td><span class="badge-estado {{ fila.estado|badge }}">{{ fila.estado }}</span></td>
+          <td class="acciones">
+            <a href="{% url 'vehiculo_detalle' fila.vehiculo.id %}">Ver</a> ·
+            <a href="{% url 'vehiculo_editar' fila.vehiculo.id %}">Editar</a> ·
+            <a href="{% url 'vehiculo_baja' fila.vehiculo.id %}">Baja</a>
+          </td>
+        </tr>
+      {% empty %}
+        <tr>
+          <td colspan="6" class="av-vacio">
+            No hay vehículos registrados{% if buscar %} para la placa "{{ buscar }}"{% endif %}.
+          </td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endblock %}
+
+{% block pie %}{% endblock %}

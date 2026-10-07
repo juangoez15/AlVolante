@@ -1,0 +1,26 @@
+{% extends "flota/base.html" %}
+{% comment %}HU6 — Confirmación de baja lógica; conserva documentos e historial.{% endcomment %}
+
+{% block titulo %}alVolante — Dar de baja{% endblock %}
+{% block breadcrumb %}<a href="{% url 'vehiculos' %}">Vehículos</a> › Dar de baja{% endblock %}
+
+{% block contenido %}
+<div class="av-card av-card-estrecha">
+  {% include "flota/partials/titulo_seccion.html" with texto="Confirmar baja" %}
+
+  <p class="mb-1">¿Está seguro de dar de baja este vehículo?</p>
+  <p class="av-nota">
+    {{ vehiculo.placa }} — {{ vehiculo.descripcion }}. El vehículo pasará a estado
+    "Inactivo" y dejará de aparecer en el listado y en el panel. Su información,
+    documentos e historial de mantenimiento se conservan.
+  </p>
+
+  <form method="post" class="d-flex gap-3 mt-3">
+    {% csrf_token %}
+    <button type="submit" class="btn-av">Dar de baja</button>
+    <a class="btn-av-outline" href="{% url 'vehiculos' %}">Cancelar</a>
+  </form>
+</div>
+{% endblock %}
+
+{% block pie %}{% endblock %}

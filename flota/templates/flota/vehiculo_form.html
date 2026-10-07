@@ -1,0 +1,29 @@
+{% extends "flota/base.html" %}
+{% comment %}HU3 y HU5 — Alta y edición comparten campos y validaciones.{% endcomment %}
+
+{% block titulo %}alVolante — {{ titulo }}{% endblock %}
+{% block breadcrumb %}<a href="{% url 'vehiculos' %}">Vehículos</a> › {{ titulo }}{% endblock %}
+
+{% block contenido %}
+{% include "flota/partials/titulo_seccion.html" with texto="Datos del vehículo" %}
+
+<div class="av-card">
+  <form method="post" novalidate>
+    {% csrf_token %}
+    <div class="row">
+      <div class="col-md-6">{% include "flota/partials/campo.html" with campo=form.placa %}</div>
+      <div class="col-md-6">{% include "flota/partials/campo.html" with campo=form.tipo %}</div>
+      <div class="col-md-6">{% include "flota/partials/campo.html" with campo=form.marca %}</div>
+      <div class="col-md-6">{% include "flota/partials/campo.html" with campo=form.modelo %}</div>
+      <div class="col-md-6">{% include "flota/partials/campo.html" with campo=form.anio %}</div>
+      <div class="col-md-6">{% include "flota/partials/campo.html" with campo=form.kilometraje_actual %}</div>
+    </div>
+    <div class="d-flex gap-3 mt-2">
+      <button type="submit" class="btn-av">{% if es_creacion %}Guardar{% else %}Guardar cambios{% endif %}</button>
+      <a class="btn-av-outline" href="{% if vehiculo %}{% url 'vehiculo_detalle' vehiculo.id %}{% else %}{% url 'vehiculos' %}{% endif %}">Cancelar</a>
+    </div>
+  </form>
+</div>
+{% endblock %}
+
+{% block pie %}{% endblock %}

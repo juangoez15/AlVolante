@@ -1,0 +1,35 @@
+{% extends "flota/base.html" %}
+{% load flota_extras %}
+{% comment %}HU14 — Registro manual de la lectura del odómetro.{% endcomment %}
+
+{% block titulo %}alVolante — Registrar kilometraje{% endblock %}
+{% block breadcrumb %}<a href="{% url 'vehiculos' %}">Vehículos</a> › Registrar kilometraje{% endblock %}
+
+{% block contenido %}
+{% include "flota/partials/titulo_seccion.html" with texto="Registrar kilometraje actual" %}
+
+<div class="av-card">
+  <form method="post" novalidate>
+    {% csrf_token %}
+    {% include "flota/partials/campo.html" with campo=form.vehiculo_id %}
+
+    {% if vehiculo_referencia %}
+      <p class="form-text mb-3">
+        Último kilometraje registrado: {{ vehiculo_referencia.kilometraje_actual|km }} km ·
+        {{ vehiculo_referencia.fecha_ultima_lectura|date:"d/m/Y" }}
+      </p>
+    {% endif %}
+
+    <div class="row">
+      <div class="col-md-6">{% include "flota/partials/campo.html" with campo=form.kilometraje %}</div>
+      <div class="col-md-6">{% include "flota/partials/campo.html" with campo=form.fecha_lectura %}</div>
+    </div>
+    <div class="d-flex gap-3 mt-2">
+      <button type="submit" class="btn-av">Registrar kilometraje</button>
+      <a class="btn-av-outline" href="{% url 'vehiculos' %}">Cancelar</a>
+    </div>
+  </form>
+</div>
+{% endblock %}
+
+{% block pie %}{% endblock %}

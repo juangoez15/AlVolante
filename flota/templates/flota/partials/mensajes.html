@@ -1,0 +1,6 @@
+{% comment %}Mensajes de confirmación y error emitidos por las vistas.{% endcomment %}
+{% for mensaje in messages %}
+  <div class="alert {% if mensaje.tags == 'error' %}alert-danger{% else %}alert-success{% endif %} py-2 px-3" role="alert">
+    {{ mensaje }}
+  </div>
+{% endfor %}

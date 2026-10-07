@@ -1,0 +1,40 @@
+{% extends "flota/base.html" %}
+{% comment %}HU11 — Umbrales de anticipación y destinatario de las notificaciones.{% endcomment %}
+
+{% block titulo %}alVolante — Configuración de alertas{% endblock %}
+{% block breadcrumb %}Configuración de alertas{% endblock %}
+
+{% block contenido %}
+{% include "flota/partials/titulo_seccion.html" with texto="Alertas automáticas de vencimiento" dorado=True %}
+
+<div class="av-card">
+  <p class="av-nota">
+    Se notifica por correo antes del vencimiento de SOAT, Tecnomecánica y
+    mantenimientos programados. El envío se ejecuta una vez al día mediante el
+    comando <code>enviar_alertas</code>, no en tiempo real.
+  </p>
+
+  <form method="post" novalidate>
+    {% csrf_token %}
+
+    <div class="mb-3">
+      <label class="form-label">{{ form.umbrales_dias.label }}</label>
+      {% for opcion in form.umbrales_dias %}
+        <div class="form-check form-switch">
+          {{ opcion.tag }}<label class="form-check-label" for="{{ opcion.id_for_label }}">{{ opcion.choice_label }}</label>
+        </div>
+      {% endfor %}
+      {% for error in form.umbrales_dias.errors %}<div class="error-msg">{{ error }}</div>{% endfor %}
+    </div>
+
+    <div class="row">
+      <div class="col-md-6">{% include "flota/partials/campo.html" with campo=form.umbral_km %}</div>
+      <div class="col-md-6">{% include "flota/partials/campo.html" with campo=form.correo_notificaciones %}</div>
+    </div>
+
+    <button type="submit" class="btn-av mt-2">Guardar configuración</button>
+  </form>
+</div>
+{% endblock %}
+
+{% block pie %}{% endblock %}

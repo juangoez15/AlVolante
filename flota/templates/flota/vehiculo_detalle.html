@@ -1,0 +1,112 @@
+{% extends "flota/base.html" %}
+{% load flota_extras %}
+{% comment %}HU15 — Ficha del vehículo: datos, documentos (HU8), mantenimientos (HU9, HU10) y lecturas (HU14).{% endcomment %}
+
+{% block titulo %}alVolante — {{ vehiculo.placa }}{% endblock %}
+{% block breadcrumb %}<a href="{% url 'vehiculos' %}">Vehículos</a> › {{ vehiculo.placa }}{% endblock %}
+
+{% block contenido %}
+<div class="av-section-title">
+  <span class="dot"></span> {{ vehiculo.placa }} — {{ vehiculo.descripcion }}
+  {% if not vehiculo.activo %}<span class="badge-estado badge-neutral ms-2">INACTIVO</span>{% endif %}
+</div>
+
+{% include "flota/partials/acciones_vehiculo.html" %}
+
+<div class="av-card">
+  <div class="row g-4">
+    <div class="col-6 col-md-3 av-dato"><span class="k">Placa</span><span class="v">{{ vehiculo.placa }}</span></div>
+    <div class="col-6 col-md-3 av-dato"><span class="k">Tipo</span><span class="v">{{ vehiculo.tipo }}</span></div>
+    <div class="col-6 col-md-3 av-dato"><span class="k">Marca</span><span class="v">{{ vehiculo.marca }}</span></div>
+    <div class="col-6 col-md-3 av-dato"><span class="k">Modelo</span><span class="v">{{ vehiculo.modelo }}</span></div>
+    <div class="col-6 col-md-3 av-dato"><span class="k">Año</span><span class="v">{{ vehiculo.anio }}</span></div>
+    <div class="col-6 col-md-3 av-dato"><span class="k">Kilometraje actual</span><span class="v">{{ vehiculo.kilometraje_actual|km }} km</span></div>
+    <div class="col-6 col-md-3 av-dato"><span class="k">Última lectura</span><span class="v">{{ vehiculo.fecha_ultima_lectura|date:"d/m/Y"|default:"—" }}</span></div>
+  </div>
+</div>
+
+{% include "flota/partials/titulo_seccion.html" with texto="Documentos legales" %}
+<div class="av-card">
+  <table class="av-table">
+    <tbody>
+      <tr>
+        <td class="av-col-etiqueta"><strong>SOAT</strong></td>
+        <td>Vence: {{ vehiculo.vencimiento_soat|date:"d/m/Y"|default:"sin registro" }}</td>
+        <td class="text-end"><span class="badge-estado {{ estado_soat|badge }}">{{ estado_soat }}</span></td>
+      </tr>
+      <tr>
+        <td><strong>Revisión Tecnomecánica</strong></td>
+        <td>Vence: {{ vehiculo.vencimiento_tecnomecanica|date:"d/m/Y"|default:"sin registro" }}</td>
+        <td class="text-end"><span class="badge-estado {{ estado_tecnomecanica|badge }}">{{ estado_tecnomecanica }}</span></td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+{% include "flota/partials/titulo_seccion.html" with texto="Mantenimiento preventivo" dorado=True %}
+<div class="av-card">
+  <table class="av-table">
+    <thead>
+      <tr><th>Tipo de mantenimiento</th><th>Criterio y objetivo</th><th>Estado</th><th></th></tr>
+    </thead>
+    <tbody>
+      {% for item in mantenimientos %}
+        <tr class="{% if item.esta_atrasado %}av-row-alerta{% endif %}">
+          <td>{{ item.mantenimiento.tipo }}</td>
+          <td>{{ item.mantenimiento.objetivo_texto }}</td>
+          <td>
+            <span class="badge-estado {{ item.estado|badge }}">{{ item.estado }}</span>
+            {% if item.proximo_a_vencer and not item.esta_atrasado %}
+              <span class="badge-estado badge-warn ms-1">Próximo a vencer</span>
+            {% endif %}
+          </td>
+          <td class="text-end">
+            {% if vehiculo.activo %}
+              <form method="post" action="{% url 'mantenimiento_cumplir' vehiculo.id item.mantenimiento.id %}">
+                {% csrf_token %}
+                <button type="submit" class="btn-chip">Marcar como cumplido</button>
+              </form>
+            {% endif %}
+          </td>
+        </tr>
+      {% empty %}
+        <tr><td colspan="4" class="av-vacio">Sin mantenimientos programados.</td></tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+
+{% include "flota/partials/titulo_seccion.html" with texto="Historial de mantenimientos cumplidos" dorado=True %}
+<div class="av-card">
+  <table class="av-table">
+    <thead><tr><th>Tipo de mantenimiento</th><th>Fecha de cumplimiento</th><th>Kilometraje</th></tr></thead>
+    <tbody>
+      {% for mantenimiento in historial %}
+        <tr>
+          <td>{{ mantenimiento.tipo }}</td>
+          <td>{{ mantenimiento.fecha_cumplimiento|date:"d/m/Y" }}</td>
+          <td>{{ mantenimiento.kilometraje_cumplimiento|km }} km</td>
+        </tr>
+      {% empty %}
+        <tr><td colspan="3" class="av-vacio">Aún no hay mantenimientos cumplidos.</td></tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+
+{% include "flota/partials/titulo_seccion.html" with texto="Últimas lecturas de kilometraje" %}
+<div class="av-card">
+  <table class="av-table">
+    <thead><tr><th>Fecha de lectura</th><th>Kilometraje</th></tr></thead>
+    <tbody>
+      {% for lectura in lecturas %}
+        <tr><td>{{ lectura.fecha_lectura|date:"d/m/Y" }}</td><td>{{ lectura.kilometraje|km }} km</td></tr>
+      {% empty %}
+        <tr><td colspan="2" class="av-vacio">Sin lecturas registradas.</td></tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endblock %}
+
+{% block pie %}{% endblock %}

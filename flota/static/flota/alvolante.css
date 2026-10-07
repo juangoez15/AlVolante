@@ -1,0 +1,458 @@
+/* ==========================================================================
+   alVolante — hoja de estilos del MVP
+   Complementa Bootstrap 5. Organizada por: variables, layout, componentes
+   y utilidades.
+   ========================================================================== */
+
+/* --------------------------------------------------------------------------
+   1. Variables
+   -------------------------------------------------------------------------- */
+:root {
+  --av-navy: #16315c;
+  --av-navy-dark: #112549;
+  --av-gold: #b28a4c;
+  --av-gold-dark: #9c7740;
+  --av-bg: #f6f4ef;
+  --av-surface: #ffffff;
+  --av-border: #e6e2d9;
+  --av-border-soft: #f1efea;
+  --av-text: #1f2937;
+  --av-text-muted: #6b7280;
+
+  --av-radius: 12px;
+  --av-radius-sm: 8px;
+  --av-shadow: 0 1px 2px rgba(17, 37, 73, 0.05);
+}
+
+/* --------------------------------------------------------------------------
+   2. Layout
+   -------------------------------------------------------------------------- */
+body {
+  background-color: var(--av-bg);
+  color: var(--av-text);
+  font-family: "Segoe UI", system-ui, -apple-system, sans-serif;
+  font-size: 0.93rem;
+}
+
+.av-main {
+  max-width: 1120px;
+  margin: 1.6rem auto 3rem;
+  padding: 0 1.2rem;
+}
+
+.av-navbar {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 0.65rem 1.5rem;
+  background-color: var(--av-navy);
+  color: #fff;
+}
+
+.av-brand {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: #fff;
+  font-size: 1.05rem;
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.av-brand .logo {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  background: #fff;
+  color: var(--av-navy);
+  font-size: 0.8rem;
+  font-weight: 800;
+}
+
+.av-breadcrumb {
+  padding-left: 1rem;
+  border-left: 1px solid rgba(255, 255, 255, 0.25);
+  color: rgba(255, 255, 255, 0.75);
+  font-size: 0.85rem;
+}
+
+.av-breadcrumb a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.av-nav-right {
+  display: flex;
+  gap: 1.2rem;
+  margin-left: auto;
+  font-size: 0.82rem;
+}
+
+.av-nav-right a {
+  color: rgba(255, 255, 255, 0.85);
+  text-decoration: none;
+}
+
+.av-nav-right a:hover {
+  color: #fff;
+  text-decoration: underline;
+}
+
+.av-footer {
+  margin-top: 2.4rem;
+  color: #9ca3af;
+  font-size: 0.72rem;
+  text-align: center;
+}
+
+/* --------------------------------------------------------------------------
+   3. Componentes — superficies
+   -------------------------------------------------------------------------- */
+.av-card {
+  padding: 1.2rem 1.4rem;
+  border: 1px solid var(--av-border);
+  border-radius: var(--av-radius);
+  background: var(--av-surface);
+  box-shadow: var(--av-shadow);
+}
+
+.av-card + .av-card {
+  margin-top: 1.4rem;
+}
+
+.av-card-estrecha {
+  max-width: 560px;
+}
+
+.av-section-title {
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+  margin-bottom: 0.9rem;
+  color: var(--av-navy);
+  font-size: 1.05rem;
+  font-weight: 700;
+}
+
+.av-section-title .dot {
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: var(--av-navy);
+}
+
+.av-section-title .dot.gold {
+  background: var(--av-gold);
+}
+
+/* --------------------------------------------------------------------------
+   4. Componentes — indicadores del panel
+   -------------------------------------------------------------------------- */
+.av-kpi {
+  display: flex;
+  align-items: center;
+  gap: 0.9rem;
+  height: 100%;
+  padding: 1rem 1.2rem;
+  border: 1px solid var(--av-border);
+  border-radius: var(--av-radius);
+  background: var(--av-surface);
+}
+
+.av-kpi .icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  background: var(--av-navy);
+  color: #fff;
+  font-size: 1.1rem;
+}
+
+.av-kpi .value {
+  color: var(--av-navy);
+  font-size: 1.9rem;
+  font-weight: 700;
+  line-height: 1;
+}
+
+.av-kpi .label {
+  color: var(--av-text-muted);
+  font-size: 0.78rem;
+}
+
+/* --------------------------------------------------------------------------
+   5. Componentes — tablas
+   -------------------------------------------------------------------------- */
+.av-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.av-table thead th {
+  padding: 0.55rem 0.5rem;
+  border-bottom: 1px solid var(--av-border);
+  color: var(--av-text-muted);
+  font-size: 0.76rem;
+  font-weight: 600;
+  text-align: left;
+}
+
+.av-table tbody td {
+  padding: 0.7rem 0.5rem;
+  border-bottom: 1px solid var(--av-border-soft);
+  vertical-align: middle;
+}
+
+.av-table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.av-table .placa {
+  color: var(--av-navy);
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.av-col-etiqueta {
+  width: 35%;
+}
+
+.av-row-alerta {
+  background: #fdf6f5;
+}
+
+/* --------------------------------------------------------------------------
+   6. Componentes — chips de estado
+   -------------------------------------------------------------------------- */
+.badge-estado {
+  display: inline-block;
+  padding: 0.18rem 0.7rem;
+  border-radius: 999px;
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+}
+
+.badge-ok {
+  background: #e3f3e6;
+  color: #1f6b34;
+}
+
+.badge-warn {
+  background: #fdf1d8;
+  color: #8a6212;
+}
+
+.badge-danger {
+  background: #fbe0e0;
+  color: #a12626;
+}
+
+.badge-neutral {
+  background: #eceef2;
+  color: #5b6472;
+}
+
+/* --------------------------------------------------------------------------
+   7. Componentes — botones
+   -------------------------------------------------------------------------- */
+.btn-av,
+.btn-av-outline,
+.btn-av-gold,
+.btn-chip {
+  border-radius: var(--av-radius-sm);
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.btn-av {
+  padding: 0.5rem 1.6rem;
+  border: none;
+  background: var(--av-navy);
+  color: #fff;
+  font-size: 0.85rem;
+}
+
+.btn-av:hover {
+  background: var(--av-navy-dark);
+  color: #fff;
+}
+
+.btn-av-outline {
+  display: inline-block;
+  padding: 0.5rem 1.6rem;
+  border: 1px solid var(--av-navy);
+  background: var(--av-surface);
+  color: var(--av-navy);
+  font-size: 0.85rem;
+}
+
+.btn-av-outline:hover {
+  background: var(--av-navy);
+  color: #fff;
+}
+
+.btn-av-gold {
+  padding: 0.45rem 1.1rem;
+  border: none;
+  background: var(--av-gold);
+  color: #fff;
+  font-size: 0.82rem;
+}
+
+.btn-av-gold:hover {
+  background: var(--av-gold-dark);
+  color: #fff;
+}
+
+.btn-chip {
+  display: inline-block;
+  padding: 0.38rem 1rem;
+  border: 1px solid var(--av-navy);
+  background: var(--av-surface);
+  color: var(--av-navy);
+  font-size: 0.8rem;
+}
+
+.btn-chip:hover {
+  background: var(--av-navy);
+  color: #fff;
+}
+
+.acciones a {
+  color: var(--av-navy);
+  font-size: 0.8rem;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.acciones a:hover {
+  text-decoration: underline;
+}
+
+/* --------------------------------------------------------------------------
+   8. Componentes — formularios
+   -------------------------------------------------------------------------- */
+label.form-label {
+  margin-bottom: 0.2rem;
+  color: var(--av-text-muted);
+  font-size: 0.78rem;
+}
+
+.form-control,
+.form-select {
+  padding: 0.5rem 0.75rem;
+  border: 1px solid #c9d2e0;
+  border-radius: var(--av-radius-sm);
+  font-size: 0.88rem;
+}
+
+.form-control:focus,
+.form-select:focus {
+  border-color: var(--av-navy);
+  box-shadow: 0 0 0 0.15rem rgba(22, 49, 92, 0.12);
+}
+
+.error-msg {
+  margin-top: 0.22rem;
+  color: #a12626;
+  font-size: 0.76rem;
+}
+
+.av-buscador {
+  max-width: 340px;
+}
+
+/* --------------------------------------------------------------------------
+   9. Pantalla de acceso
+   -------------------------------------------------------------------------- */
+.av-login-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  padding: 2rem 1rem;
+  background: var(--av-navy);
+}
+
+.av-login-card {
+  width: 100%;
+  max-width: 420px;
+  padding: 2.2rem 2.4rem;
+  border-radius: 14px;
+  background: var(--av-surface);
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.25);
+}
+
+.av-login-card h1 {
+  margin-bottom: 0.1rem;
+  color: var(--av-navy);
+  font-size: 1.6rem;
+  font-weight: 800;
+  text-align: center;
+}
+
+.av-login-card .sub {
+  margin-bottom: 1.6rem;
+  color: var(--av-text-muted);
+  font-size: 0.8rem;
+  text-align: center;
+}
+
+.av-login-foot {
+  margin-top: 1.4rem;
+  color: rgba(255, 255, 255, 0.55);
+  font-size: 0.75rem;
+  line-height: 1.6;
+  text-align: center;
+}
+
+/* --------------------------------------------------------------------------
+   10. Utilidades
+   -------------------------------------------------------------------------- */
+.av-dato {
+  display: flex;
+  flex-direction: column;
+}
+
+.av-dato .k {
+  color: var(--av-text-muted);
+  font-size: 0.72rem;
+}
+
+.av-dato .v {
+  color: var(--av-navy);
+  font-weight: 700;
+}
+
+.av-nota {
+  color: var(--av-text-muted);
+  font-size: 0.82rem;
+}
+
+.av-vacio {
+  padding-top: 1rem;
+  padding-bottom: 1rem;
+  color: var(--av-text-muted);
+}
+
+.av-avatar {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 96px;
+  height: 96px;
+  border: 3px solid var(--av-gold);
+  border-radius: 50%;
+  background: #e8eef7;
+  color: var(--av-navy);
+  font-size: 2.4rem;
+}

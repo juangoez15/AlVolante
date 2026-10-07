@@ -1,0 +1,14 @@
+{% comment %}Acciones del detalle. Se ocultan si el vehículo está dado de baja (HU6).{% endcomment %}
+{% if vehiculo.activo %}
+  <div class="d-flex flex-wrap gap-2 mb-3">
+    <a class="btn-chip" href="{% url 'vehiculo_editar' vehiculo.id %}">Editar vehículo</a>
+    <a class="btn-chip" href="{% url 'documentos' vehiculo.id %}">Actualizar documentos</a>
+    <a class="btn-chip" href="{% url 'mantenimiento_crear' vehiculo.id %}">Programar mantenimiento</a>
+    <a class="btn-chip" href="{% url 'kilometraje' %}?vehiculo={{ vehiculo.id }}">Registrar kilometraje</a>
+    <a class="btn-chip" href="{% url 'vehiculo_baja' vehiculo.id %}">Dar de baja</a>
+  </div>
+{% else %}
+  <div class="alert alert-secondary py-2 px-3 av-nota">
+    Vehículo dado de baja: pantalla en modo consulta, sin acciones de edición.
+  </div>
+{% endif %}

@@ -1,0 +1,82 @@
+{% extends "flota/base.html" %}
+{% load flota_extras %}
+{% comment %}HU12 — Panel del administrador: indicadores y vehículos en alerta.{% endcomment %}
+
+{% block titulo %}alVolante — Panel del administrador{% endblock %}
+{% block breadcrumb %}Panel del administrador{% endblock %}
+
+{% block contenido %}
+{% include "flota/partials/titulo_seccion.html" with texto="Estado general de la flota" %}
+
+<div class="row g-3 mb-4">
+  <div class="col-md-4">
+    <div class="av-kpi">
+      <span class="icon">🚗</span>
+      <div>
+        <div class="value">{{ resumen.al_dia }}</div>
+        <div class="label">Vehículos al día</div>
+      </div>
+      <span class="badge-estado badge-ok ms-auto">AL DÍA</span>
+    </div>
+  </div>
+  <div class="col-md-4">
+    <div class="av-kpi">
+      <span class="icon">📄</span>
+      <div>
+        <div class="value">{{ resumen.por_vencer }}</div>
+        <div class="label">Próximos a vencer</div>
+      </div>
+      <span class="badge-estado badge-warn ms-auto">ALERTA</span>
+    </div>
+  </div>
+  <div class="col-md-4">
+    <div class="av-kpi">
+      <span class="icon">⛔</span>
+      <div>
+        <div class="value">{{ resumen.vencidos }}</div>
+        <div class="label">Documentos vencidos</div>
+      </div>
+      <span class="badge-estado badge-danger ms-auto">VENCIDO</span>
+    </div>
+  </div>
+</div>
+
+{% if resumen.sin_registro %}
+  <div class="alert alert-warning py-2 px-3 av-nota">
+    {{ resumen.sin_registro }} vehículo(s) sin fechas de documentos registradas.
+    Complete SOAT y Tecnomecánica para que el sistema calcule sus vencimientos.
+  </div>
+{% endif %}
+
+{% include "flota/partials/titulo_seccion.html" with texto="Vehículos que requieren atención" %}
+<div class="av-card">
+  <table class="av-table">
+    <thead>
+      <tr>
+        <th>Placa</th><th>Tipo</th><th>SOAT</th><th>Tecnomecánica</th><th>Próx. mantenimiento</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for fila in resumen.atencion %}
+        <tr class="{% if fila.tiene_mantenimiento_atrasado %}av-row-alerta{% endif %}">
+          <td><a class="placa" href="{% url 'vehiculo_detalle' fila.vehiculo.id %}">{{ fila.vehiculo.placa }}</a></td>
+          <td>{{ fila.vehiculo.tipo }}</td>
+          <td><span class="badge-estado {{ fila.estado_soat|badge }}">{{ fila.estado_soat }}</span></td>
+          <td><span class="badge-estado {{ fila.estado_tecnomecanica|badge }}">{{ fila.estado_tecnomecanica }}</span></td>
+          <td>{{ fila.proximo_mantenimiento }}</td>
+        </tr>
+      {% empty %}
+        <tr><td colspan="5" class="av-vacio">Ningún vehículo requiere atención en este momento.</td></tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+
+<div class="mt-3 d-flex flex-wrap gap-2">
+  <a class="btn-chip" href="{% url 'vehiculos' %}">Ver todos mis vehículos</a>
+  <a class="btn-chip" href="{% url 'kilometraje' %}">Registrar kilometraje</a>
+  <a class="btn-chip" href="{% url 'alertas' %}">Configurar alertas</a>
+</div>
+{% endblock %}
+
+{% block pie %}{% endblock %}
