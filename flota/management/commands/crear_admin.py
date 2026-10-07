@@ -9,19 +9,18 @@ class Command(BaseCommand):
         password = 'alvolante2026'
         
         if not UsuarioModel.objects.filter(correo=correo).exists():
-            # Creamos la instancia del usuario de forma directa
-            user = UsuarioModel(correo=correo)
-            user.set_password(password)
+            # Creamos el usuario asignando directamente la contraseña y campos comunes
+            usuario = UsuarioModel(correo=correo, password=password)
             
-            # Intentamos activar los permisos de superusuario según los campos que tenga el modelo
-            if hasattr(user, 'is_staff'):
-                user.is_staff = True
-            if hasattr(user, 'is_superuser'):
-                user.is_superuser = True
-            if hasattr(user, 'is_active'):
-                user.is_active = True
+            # Activamos flags de permisos si existen en tu modelo
+            if hasattr(usuario, 'is_staff'):
+                usuario.is_staff = True
+            if hasattr(usuario, 'is_superuser'):
+                usuario.is_superuser = True
+            if hasattr(usuario, 'is_active'):
+                usuario.is_active = True
             
-            user.save()
+            usuario.save()
             self.stdout.write(self.style.SUCCESS(f'Usuario administrador {correo} creado exitosamente'))
         else:
             self.stdout.write(self.style.WARNING(f'El usuario {correo} ya existe'))
