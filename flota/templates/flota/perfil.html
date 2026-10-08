@@ -22,7 +22,7 @@
         
         <label for="avatar" style="cursor: pointer;" title="Haz clic para cambiar tu foto de perfil">
           {% if usuario.avatar %}
-            <img src="{{ usuario.avatar }}" alt="Avatar" class="rounded-circle mb-2" style="width: 110px; height: 110px; object-fit: cover;">
+            <img src="{{ usuario.avatar.url }}" alt="Avatar" class="rounded-circle mb-2" style="width: 110px; height: 110px; object-fit: cover;">
           {% else %}
             <div class="av-avatar mb-2 mx-auto d-flex align-items-center justify-content-center rounded-circle" style="width: 110px; height: 110px; background-color: #e9ecef;">
               <!-- Puedes poner aquí un ícono por defecto si gustas -->
