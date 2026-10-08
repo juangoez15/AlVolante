@@ -63,8 +63,8 @@ body {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 26px;
-  height: 26px;
+  width:40x;
+  height: 40x;
   border-radius: 50%;
   background: #fff;
   color: var(--av-navy);

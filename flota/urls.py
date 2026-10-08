@@ -16,6 +16,7 @@ urlpatterns = [
     path("vehiculos/<int:vehiculo_id>/", views.detalle, name="vehiculo_detalle"),
     path("vehiculos/<int:vehiculo_id>/editar/", views.editar, name="vehiculo_editar"),
     path("vehiculos/<int:vehiculo_id>/baja/", views.dar_de_baja, name="vehiculo_baja"),
+    path("vehiculos/<int:vehiculo_id>/reactivar/", views.reactivar, name="vehiculo_reactivar"),  # <--- Ruta de reactivación añadida
     # HU7, HU8 — Documentos legales
     path("vehiculos/<int:vehiculo_id>/documentos/", views.documentos, name="documentos"),
     # HU9, HU10 — Mantenimiento preventivo

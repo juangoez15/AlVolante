@@ -10,17 +10,19 @@
 </head>
 <body>
 <div class="av-login-wrapper">
-  <div class="av-login-card">
-    <h1>alVolante</h1>
-    <p class="sub">Gestión de mantenimiento y vigencia documental de flotas</p>
+  <div class="av-login-card text-center">
+    <!-- Logo agrandado -->
+    <div class="mb-4">
+      <img src="{% static 'flota/logo_full.png' %}" alt="alVolante" class="img-fluid" style="max-height: 120; width: auto;">
+    </div>
 
     {% if form.non_field_errors %}
-      <div class="alert alert-danger py-2 px-3">
+      <div class="alert alert-danger py-2 px-3 text-start">
         {% for error in form.non_field_errors %}{{ error }}{% endfor %}
       </div>
     {% endif %}
 
-    <form method="post" novalidate>
+    <form method="post" novalidate class="text-start">
       {% csrf_token %}
       {% include "flota/partials/campo.html" with campo=form.correo %}
       {% include "flota/partials/campo.html" with campo=form.password %}

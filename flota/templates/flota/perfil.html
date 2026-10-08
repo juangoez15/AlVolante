@@ -14,12 +14,15 @@
     
     <div class="row align-items-center">
       <div class="col-md-3 text-center">
+        <!-- Línea temporal de depuración para ver qué trae usuario.avatar -->
+     
+
         <!-- Input de archivo oculto que se activa al hacer clic en el avatar -->
         <input type="file" id="avatar" name="avatar" accept="image/*" class="d-none" onchange="this.form.submit();">
         
         <label for="avatar" style="cursor: pointer;" title="Haz clic para cambiar tu foto de perfil">
           {% if usuario.avatar %}
-            <img src="{{ usuario.avatar.url }}" alt="Avatar" class="rounded-circle mb-2" style="width: 110px; height: 110px; object-fit: cover;">
+            <img src="{{ usuario.avatar }}" alt="Avatar" class="rounded-circle mb-2" style="width: 110px; height: 110px; object-fit: cover;">
           {% else %}
             <div class="av-avatar mb-2 mx-auto d-flex align-items-center justify-content-center rounded-circle" style="width: 110px; height: 110px; background-color: #e9ecef;">
               <!-- Puedes poner aquí un ícono por defecto si gustas -->

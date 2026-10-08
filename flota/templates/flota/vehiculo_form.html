@@ -24,6 +24,30 @@
     </div>
   </form>
 </div>
+
+<!-- Ventana flotante (Modal) si el vehículo ya existe pero está inactivo -->
+{% if vehiculo_inactivo %}
+<div class="modal fade show" tabindex="-1" role="dialog" style="display: block; background: rgba(0,0,0,0.5);">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Vehículo dado de baja</h5>
+      </div>
+      <div class="modal-body">
+        <p>El vehículo con placa <strong>{{ vehiculo_inactivo.placa }}</strong> ya se encuentra registrado pero está dado de baja.</p>
+        <p>¿Deseas reactivarlo?</p>
+      </div>
+      <div class="modal-footer">
+        <a href="{% url 'vehiculo_reactivar' vehiculo_inactivo.id %}" class="btn-av text-decoration-none d-inline-flex align-items-center justify-content-center px-3 py-2">Sí, reactivar</a>
+        <a href="{% url 'vehiculos' %}" class="btn-av-outline text-decoration-none d-inline-flex align-items-center justify-content-center px-3 py-2">Cancelar</a>
+      </div>
+    </div>
+  </div>
+</div>
+{% endif %}
+
 {% endblock %}
 
-{% block pie %}{% endblock %}
+{% block pie %}
+
+{% endblock %}

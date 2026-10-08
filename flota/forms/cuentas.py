@@ -6,7 +6,7 @@ from django import forms
 
 from flota.constants import Mensajes
 from flota.forms.base import CLASE_INPUT, FormularioBase, entrada, validar_correo
-from flota.repositories import memory
+from flota.repositories import orm
 
 LONGITUD_MINIMA_PASSWORD = 8
 
@@ -54,7 +54,7 @@ class PerfilForm(FormularioBase):
     def clean_correo(self) -> str:
         correo = validar_correo(self.cleaned_data["correo"])
         excluir = self.usuario.id if self.usuario else None
-        if memory.usuarios.correo_en_uso(correo, excluir_id=excluir):
+        if orm.usuarios.correo_en_uso(correo, excluir_id=excluir):
             raise forms.ValidationError(Mensajes.CORREO_EN_USO)
         return correo
 

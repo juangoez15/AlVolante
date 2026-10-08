@@ -10,6 +10,7 @@ from flota.auth import cerrar_sesion, iniciar_sesion, usuario_autenticado
 from flota.constants import Mensajes
 from flota.decorators import login_requerido
 from flota.forms import LoginForm, PerfilForm
+from flota.repositories import orm  # <-- Importamos el orm directamente
 from flota.services import cuentas as servicio
 
 
@@ -41,28 +42,42 @@ def logout(request: HttpRequest) -> HttpResponse:
 @login_requerido
 def perfil(request: HttpRequest) -> HttpResponse:
     """Consulta y actualización de los datos del administrador (HU13)."""
-    usuario = request.usuario
-    inicial = {"nombre": usuario.nombre, "correo": usuario.correo}
+    usuario_sesion = request.usuario
     
-    # Recogemos tanto los datos POST como los archivos FILES (la imagen)
+    # Buscamos siempre el usuario fresco directamente desde el ORM usando su ID o correo
+    usuario = orm.usuarios.obtener_por_id(usuario_sesion.id) if hasattr(usuario_sesion, 'id') else None
+    if not usuario:
+        usuario = orm.usuarios.obtener_unico()
+
+    inicial = {"nombre": usuario.nombre if usuario else "", "correo": usuario.correo if usuario else ""}
+    
     formulario = PerfilForm(request.POST or None, request.FILES or None, initial=inicial, usuario=usuario)
 
-    if request.method == "POST" and formulario.is_valid():
-        # Capturamos el archivo de la imagen que se subió al hacer clic en el icono
+    if request.method == "POST":
         avatar_file = request.FILES.get('avatar')
+        
+        # CASO 1: Subida exclusiva de la imagen
+        if avatar_file:
+            usuario_actualizado = servicio.actualizar_avatar(usuario, avatar_file=avatar_file)
+            iniciar_sesion(request, usuario_actualizado)
+            messages.success(request, "Imagen subida correctamente")
+            return redirect("perfil")
 
-        resultado = servicio.actualizar_perfil(
-            usuario,
-            nombre=formulario.cleaned_data["nombre"].strip(),
-            correo=formulario.cleaned_data["correo"],
-            password=formulario.cleaned_data["password"],
-            avatar_file=avatar_file,  # <-- Se lo pasamos al servicio aquí sin error
-        )
-        messages.success(request, Mensajes.PERFIL_ACTUALIZADO)
+        # CASO 2: Actualización de datos de texto normales
+        if formulario.is_valid():
+            resultado = servicio.actualizar_perfil(
+                usuario,
+                nombre=formulario.cleaned_data["nombre"].strip(),
+                correo=formulario.cleaned_data["correo"],
+                password=formulario.cleaned_data["password"],
+            )
+            
+            iniciar_sesion(request, resultado.usuario)
+            messages.success(request, Mensajes.PERFIL_ACTUALIZADO)
 
-        if resultado.requiere_reautenticacion:
-            cerrar_sesion(request)
-            return redirect("login")
-        return redirect("perfil")
+            if resultado.requiere_reautenticacion:
+                cerrar_sesion(request)
+                return redirect("login")
+            return redirect("perfil")
 
-    return render(request, "flota/perfil.html", {"form": formulario})
+    return render(request, "flota/perfil.html", {"form": formulario, "usuario": usuario})

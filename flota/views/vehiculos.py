@@ -4,12 +4,13 @@ from __future__ import annotations
 
 from django.contrib import messages
 from django.http import HttpRequest, HttpResponse
-from django.shortcuts import redirect, render
+from django.shortcuts import get_object_or_404, redirect, render
 
 from flota.constants import Mensajes
 from flota.decorators import bloquear_si_inactivo, login_requerido, traducir_no_encontrado
 from flota.domain import rules
 from flota.forms import DocumentosForm, VehiculoForm
+from flota.models import VehiculoModel
 from flota.repositories.orm import configuracion as repo_configuracion
 from flota.services import kilometraje as servicio_kilometraje
 from flota.services import mantenimientos as servicio_mantenimientos
@@ -30,6 +31,26 @@ def listar(request: HttpRequest) -> HttpResponse:
 @login_requerido
 def crear(request: HttpRequest) -> HttpResponse:
     """Registro de un vehículo nuevo (HU3)."""
+    vehiculo_inactivo = None
+
+    if request.method == "POST":
+        placa = request.POST.get("placa")
+        if placa:
+            # Buscamos si la placa ya existe en la base de datos para este usuario
+            existente = VehiculoModel.objects.filter(placa=placa).first()
+            
+            # Si existe pero está inactivo (activo = False), mostramos el modal de reactivación
+            if existente and not existente.activo:
+                vehiculo_inactivo = existente
+                formulario = VehiculoForm(request.POST, usuario_id=request.usuario.id)
+                contexto = {
+                    "form": formulario,
+                    "titulo": "Registrar vehículo",
+                    "es_creacion": True,
+                    "vehiculo_inactivo": vehiculo_inactivo,
+                }
+                return render(request, "flota/vehiculo_form.html", contexto)
+
     formulario = VehiculoForm(request.POST or None, usuario_id=request.usuario.id)
 
     if request.method == "POST" and formulario.is_valid():
@@ -39,6 +60,19 @@ def crear(request: HttpRequest) -> HttpResponse:
 
     contexto = {"form": formulario, "titulo": "Registrar vehículo", "es_creacion": True}
     return render(request, "flota/vehiculo_form.html", contexto)
+
+
+@login_requerido
+@traducir_no_encontrado
+def reactivar(request: HttpRequest, vehiculo_id: int) -> HttpResponse:
+    """Reactiva un vehículo que había sido dado de baja."""
+    vehiculo_db = get_object_or_404(VehiculoModel, id=vehiculo_id)
+    
+    vehiculo_db.activo = True
+    vehiculo_db.save(update_fields=['activo'])
+    
+    messages.success(request, f"El vehículo {vehiculo_db.placa} ha sido reactivado exitosamente.")
+    return redirect("vehiculo_detalle", vehiculo_id=vehiculo_id)
 
 
 @login_requerido
@@ -132,4 +166,4 @@ def documentos(request: HttpRequest, vehiculo_id: int) -> HttpResponse:
         messages.success(request, Mensajes.DOCUMENTOS_ACTUALIZADOS)
         return redirect("vehiculo_detalle", vehiculo_id=vehiculo.id)
 
-    return render(request, "flota/documentos.html", {"form": formulario, "vehiculo": vehiculo}) 
+    return render(request, "flota/documentos.html", {"form": formulario, "vehiculo": vehiculo})
