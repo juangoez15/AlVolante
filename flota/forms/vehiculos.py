@@ -8,7 +8,7 @@ from django import forms
 
 from flota.constants import Mensajes, TipoVehiculo
 from flota.forms.base import FormularioBase, entrada, fecha, numero, seleccion
-from flota.repositories import memory
+from flota.repositories import orm as memory
 from flota.services import kilometraje as servicio_kilometraje
 
 ANIO_MINIMO = 1900

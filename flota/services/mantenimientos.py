@@ -9,7 +9,7 @@ from typing import Any
 from flota.constants import EstadoMantenimiento
 from flota.domain import rules
 from flota.domain.entities import Mantenimiento, Vehiculo
-from flota.repositories import memory
+from flota.repositories import orm as memory
 
 
 class MantenimientoNoEncontrado(Exception):
@@ -81,4 +81,5 @@ def marcar_cumplido(mantenimiento: Mantenimiento, vehiculo: Vehiculo) -> bool:
     mantenimiento.cumplido = True
     mantenimiento.fecha_cumplimiento = date.today()
     mantenimiento.kilometraje_cumplimiento = vehiculo.kilometraje_actual
+    memory.mantenimientos.guardar(mantenimiento)
     return True

@@ -27,7 +27,7 @@ from django.core.management.base import BaseCommand, CommandParser
 from flota.constants import EstadoMantenimiento
 from flota.domain import rules
 from flota.domain.entities import Configuracion, Vehiculo
-from flota.repositories import memory
+from flota.repositories import orm as memory
 
 logger = logging.getLogger(__name__)
 

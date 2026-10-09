@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 from flota.domain.entities import Configuracion
-from flota.repositories import memory
+from flota.repositories import orm as memory
 
 
 def obtener() -> Configuracion:

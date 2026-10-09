@@ -12,7 +12,7 @@ from __future__ import annotations
 from django.http import HttpRequest
 
 from flota.domain.entities import Usuario
-from flota.repositories import memory
+from flota.repositories import orm as memory
 
 CLAVE_SESION = "alvolante_usuario_id"
 
