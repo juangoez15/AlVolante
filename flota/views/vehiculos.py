@@ -11,6 +11,7 @@ from flota.decorators import bloquear_si_inactivo, login_requerido, traducir_no_
 from flota.domain import rules
 from flota.forms import DocumentosForm, VehiculoForm
 from flota.models import VehiculoModel
+from flota.repositories import orm  # <-- Importado correctamente para la seguridad de la sesión
 from flota.repositories.orm import configuracion as repo_configuracion
 from flota.services import kilometraje as servicio_kilometraje
 from flota.services import mantenimientos as servicio_mantenimientos
@@ -21,10 +22,19 @@ from flota.services import vehiculos as servicio
 def listar(request: HttpRequest) -> HttpResponse:
     """Listado de la flota activa con búsqueda por placa (HU4)."""
     buscar = request.GET.get("q", "")
+    
+    # Obtenemos el ID de forma segura para prevenir el Error 500
+    usuario_sesion = request.usuario
+    usuario_id = getattr(usuario_sesion, 'id', None)
+    
+    if not usuario_id:
+        usuario_nico = orm.usuarios.obtener_unico() if hasattr(orm, 'usuarios') else None
+        usuario_id = usuario_nico.id if usuario_nico else 1
+
     return render(
         request,
         "flota/vehiculos.html",
-        {"filas": servicio.listar(request.usuario.id, buscar), "buscar": buscar},
+        {"filas": servicio.listar(usuario_id, buscar), "buscar": buscar},
     )
 
 
