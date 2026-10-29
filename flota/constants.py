@@ -71,6 +71,25 @@ class Mensajes(StrEnum):
     FECHA_INVALIDA = "Ingrese una fecha válida"
     CREDENCIALES_INVALIDAS = "El usuario o la contraseña son incorrectos"
     PASSWORD_CORTA = "La contraseña debe tener al menos 8 caracteres"
+    PASSWORD_INVALIDA = (
+        "La contraseña debe tener de 8 a 12 caracteres e incluir mayúsculas, "
+        "minúsculas, números y un carácter especial"
+    )
+    PLACA_INVALIDA_OTRO = (
+        "Placa no válida. Debe tener 6 caracteres entre letras y números, "
+        "sin caracteres especiales"
+    )
+    CUENTA_BLOQUEADA = (
+        "Superó el número de intentos permitidos. Su cuenta está bloqueada, "
+        "intente de nuevo en {minutos} minutos"
+    )
+    PLACA_INVALIDA_AUTOMOVIL = (
+        "Placa no válida. Para automóvil use 3 letras y 3 números (ej. ABC123)"
+    )
+    PLACA_INVALIDA_MOTOCICLETA = (
+        "Placa no válida. Para motocicleta use 3 letras, 2 números y opcionalmente "
+        "una letra (ej. ABC12 o ABC12D)"
+    )
     SOLO_NUMEROS_ANIO = "El año solo acepta valores numéricos"
     SOLO_NUMEROS_KM = "El kilometraje solo acepta valores numéricos"
     FECHA_PASADA = "La fecha programada no puede ser anterior a la fecha actual"

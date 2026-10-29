@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from dataclasses import dataclass, field
-from datetime import date
+from datetime import date, datetime
 
 from flota.constants import (
     UMBRAL_DIAS_DEFECTO,
@@ -20,6 +20,8 @@ class Usuario:
     correo: str
     password: str
     avatar: str | None = None  # <-- Añadido
+    intentos_fallidos: int = 0
+    bloqueado_hasta: datetime | None = None
 
 
 @dataclass(slots=True)

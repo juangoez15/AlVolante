@@ -9,6 +9,7 @@ from flota.forms.base import CLASE_INPUT, FormularioBase, entrada, validar_corre
 from flota.repositories import orm
 
 LONGITUD_MINIMA_PASSWORD = 8
+LONGITUD_MAXIMA_PASSWORD = 12
 
 
 def _password(placeholder: str = "••••••••") -> forms.PasswordInput:
@@ -60,6 +61,15 @@ class PerfilForm(FormularioBase):
 
     def clean_password(self) -> str:
         password = self.cleaned_data.get("password", "")
-        if password and len(password) < LONGITUD_MINIMA_PASSWORD:
-            raise forms.ValidationError(Mensajes.PASSWORD_CORTA)
+        if password:
+            cumple = (
+                LONGITUD_MINIMA_PASSWORD <= len(password) <= LONGITUD_MAXIMA_PASSWORD
+                and any(c.isupper() for c in password)
+                and any(c.islower() for c in password)
+                and any(c.isdigit() for c in password)
+                and any(not c.isalnum() and not c.isspace() for c in password)
+                and not any(c.isspace() for c in password)
+            )
+            if not cumple:
+                raise forms.ValidationError(Mensajes.PASSWORD_INVALIDA)
         return password

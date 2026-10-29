@@ -6,6 +6,8 @@ class UsuarioModel(models.Model):
     correo = models.EmailField(unique=True)
     password = models.CharField(max_length=255) # Hash o texto plano según use tu auth actual
     avatar = models.ImageField(upload_to='perfiles/', null=True, blank=True)  # <-- Añadido
+    intentos_fallidos = models.PositiveSmallIntegerField(default=0)
+    bloqueado_hasta = models.DateTimeField(null=True, blank=True)
 
     class Meta:
         db_table = 'flota_usuario'

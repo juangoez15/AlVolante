@@ -21,14 +21,20 @@ def login(request: HttpRequest) -> HttpResponse:
 
     formulario = LoginForm(request.POST or None)
     if request.method == "POST" and formulario.is_valid():
-        usuario = servicio.autenticar(
-            formulario.cleaned_data["correo"], formulario.cleaned_data["password"]
-        )
-        if usuario is None:
-            formulario.add_error(None, Mensajes.CREDENCIALES_INVALIDAS)
+        try:
+            usuario = servicio.autenticar(
+                formulario.cleaned_data["correo"], formulario.cleaned_data["password"]
+            )
+        except servicio.CuentaBloqueada as bloqueo:
+            formulario.add_error(
+                "password", Mensajes.CUENTA_BLOQUEADA.format(minutos=bloqueo.minutos)
+            )
         else:
-            iniciar_sesion(request, usuario)
-            return redirect("panel")
+            if usuario is None:
+                formulario.add_error(None, Mensajes.CREDENCIALES_INVALIDAS)
+            else:
+                iniciar_sesion(request, usuario)
+                return redirect("panel")
 
     return render(request, "flota/login.html", {"form": formulario})
 

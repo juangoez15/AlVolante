@@ -82,6 +82,12 @@ class UsuarioRepository:
         
         return self.guardar(usuario)
 
+    def actualizar_bloqueo(self, usuario_id: int, intentos_fallidos: int, bloqueado_hasta=None) -> None:
+        """Guarda el contador de intentos fallidos y el instante hasta el que está bloqueado."""
+        UsuarioModel.objects.filter(pk=usuario_id).update(
+            intentos_fallidos=intentos_fallidos, bloqueado_hasta=bloqueado_hasta
+        )
+
     def _a_entidad(self, u: UsuarioModel) -> Usuario:
         avatar_url = None
         if u and u.avatar:
@@ -102,6 +108,8 @@ class UsuarioRepository:
             correo=u.correo if u else "",
             password=u.password if u else "",
             avatar=avatar_url,
+            intentos_fallidos=u.intentos_fallidos if u else 0,
+            bloqueado_hasta=u.bloqueado_hasta if u else None,
         )
 
 class ConfiguracionRepository:

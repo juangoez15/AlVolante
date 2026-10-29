@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import re
 from datetime import date
 
 from django import forms
@@ -12,6 +13,11 @@ from flota.repositories import orm as memory
 from flota.services import kilometraje as servicio_kilometraje
 
 ANIO_MINIMO = 1900
+
+#: Automóvil: 3 letras + 3 números. Motocicleta: 3 letras + 2 números + letra opcional.
+PATRON_PLACA_AUTOMOVIL = re.compile(r"^[A-Z]{3}[0-9]{3}$")
+PATRON_PLACA_MOTOCICLETA = re.compile(r"^[A-Z]{3}[0-9]{2}[A-Z]?$")
+PATRON_PLACA_OTRO = re.compile(r"^[A-Z0-9]{6}$")
 
 
 class VehiculoForm(FormularioBase):
@@ -50,6 +56,21 @@ class VehiculoForm(FormularioBase):
         if memory.vehiculos.placa_en_uso(placa, self.usuario_id, excluir_id=self.vehiculo_id):
             raise forms.ValidationError(Mensajes.PLACA_DUPLICADA)
         return placa
+
+    def clean(self):
+        cleaned = super().clean()
+        placa = cleaned.get("placa")
+        tipo = cleaned.get("tipo")
+        if placa and tipo == TipoVehiculo.AUTOMOVIL:
+            if not PATRON_PLACA_AUTOMOVIL.match(placa):
+                self.add_error("placa", Mensajes.PLACA_INVALIDA_AUTOMOVIL)
+        elif placa and tipo == TipoVehiculo.MOTOCICLETA:
+            if not PATRON_PLACA_MOTOCICLETA.match(placa):
+                self.add_error("placa", Mensajes.PLACA_INVALIDA_MOTOCICLETA)
+        elif placa and tipo == TipoVehiculo.OTRO:
+            if not PATRON_PLACA_OTRO.match(placa):
+                self.add_error("placa", Mensajes.PLACA_INVALIDA_OTRO)
+        return cleaned
 
     def clean_marca(self) -> str:
         return self.cleaned_data["marca"].strip()
