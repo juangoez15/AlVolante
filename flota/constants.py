@@ -91,6 +91,7 @@ class Mensajes(StrEnum):
         "una letra (ej. ABC12 o ABC12D)"
     )
     SOLO_NUMEROS_ANIO = "El año solo acepta valores numéricos"
+    ANIO_INFERIOR = "El año no puede ser inferior a 1980"
     SOLO_NUMEROS_KM = "El kilometraje solo acepta valores numéricos"
     FECHA_PASADA = "La fecha programada no puede ser anterior a la fecha actual"
     FECHA_FUTURA = "La fecha de lectura no puede ser posterior a la fecha actual"

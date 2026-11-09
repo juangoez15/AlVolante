@@ -12,7 +12,7 @@ from flota.forms.base import FormularioBase, entrada, fecha, numero, seleccion
 from flota.repositories import orm as memory
 from flota.services import kilometraje as servicio_kilometraje
 
-ANIO_MINIMO = 1900
+ANIO_MINIMO = 1980
 
 #: Automóvil: 3 letras + 3 números. Motocicleta: 3 letras + 2 números + letra opcional.
 PATRON_PLACA_AUTOMOVIL = re.compile(r"^[A-Z]{3}[0-9]{3}$")
@@ -36,7 +36,10 @@ class VehiculoForm(FormularioBase):
         min_value=ANIO_MINIMO,
         max_value=date.today().year + 1,
         widget=numero("2020"),
-        error_messages={"invalid": Mensajes.SOLO_NUMEROS_ANIO},
+        error_messages={
+            "invalid": Mensajes.SOLO_NUMEROS_ANIO,
+            "min_value": Mensajes.ANIO_INFERIOR,
+        },
     )
     kilometraje_actual = forms.IntegerField(
         label="Kilometraje actual",
